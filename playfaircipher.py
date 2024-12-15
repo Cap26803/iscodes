@@ -30,6 +30,24 @@ def encrypt_playfair(key, plaintext):
             ciphertext += matrix[row_a][col_b] + matrix[row_b][col_a]
     return ciphertext
 
+def decrypt_playfair(key, ciphertext):
+    matrix = generate_key_matrix(key)
+    plaintext = ''
+    for a, b in zip(ciphertext[::2], ciphertext[1::2]):
+        row_a, col_a = find_position(matrix, a)
+        row_b, col_b = find_position(matrix, b)
+        if row_a == row_b:
+            plaintext += matrix[row_a][(col_a - 1) % 5] + matrix[row_b][(col_b - 1) % 5]
+        elif col_a == col_b:
+            plaintext += matrix[(row_a - 1) % 5][col_a] + matrix[(row_b - 1) % 5][col_b]
+        else:
+            plaintext += matrix[row_a][col_b] + matrix[row_b][col_a]
+    return plaintext
+
 key = "MONARCHY"
 plaintext = "HELLO WORLD"
-print("Playfair Cipher:", encrypt_playfair(key, plaintext))
+ciphertext = encrypt_playfair(key, plaintext)
+print("Playfair Cipher (Encrypted):", ciphertext)
+
+decrypted_text = decrypt_playfair(key, ciphertext)
+print("Playfair Cipher (Decrypted):", decrypted_text)

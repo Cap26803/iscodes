@@ -1,19 +1,40 @@
-import numpy as np
+keyMatrix = [[0] * 3 for i in range(3)]
+messageVector = [[0] for i in range(3)]
+cipherMatrix = [[0] for i in range(3)]
 
+def getKeyMatrix(key):
+	k = 0
+	for i in range(3):
+		for j in range(3):
+			keyMatrix[i][j] = ord(key[k]) % 65
+			k += 1
 
-def encrypt_hill(key_matrix, plaintext):
-    plaintext = plaintext.upper().replace(' ', '')
-    while len(plaintext) % len(key_matrix) != 0:
-        plaintext += 'X'
-    plaintext_vector = [ord(char) - 65 for char in plaintext]
-    key_matrix = np.array(key_matrix)
-    ciphertext = ""
-    for i in range(0, len(plaintext_vector), len(key_matrix)):
-        chunk = plaintext_vector[i:i+len(key_matrix)]
-        result = np.dot(key_matrix, chunk) % 26
-        ciphertext += ''.join(chr(num + 65) for num in result)
-    return ciphertext
+def encrypt(messageVector):
+	for i in range(3):
+		for j in range(1):
+			cipherMatrix[i][j] = 0
+			for x in range(3):
+				cipherMatrix[i][j] += (keyMatrix[i][x] *
+									messageVector[x][j])
+			cipherMatrix[i][j] = cipherMatrix[i][j] % 26
 
-key_matrix = [[6, 24, 1], [13, 16, 10], [20, 17, 15]]
-plaintext = "HELLO"
-print("Hill Cipher:", encrypt_hill(key_matrix, plaintext))
+def HillCipher(message, key):
+	getKeyMatrix(key)
+	for i in range(3):
+		messageVector[i][0] = ord(message[i]) % 65
+	encrypt(messageVector)
+
+	CipherText = []
+	for i in range(3):
+		CipherText.append(chr(cipherMatrix[i][0] + 65))
+
+	print("Ciphertext: ", "".join(CipherText))
+
+def main():
+	message = "ACT"
+	key = "GYBNQKURP"
+	print("Message: ", message)
+	HillCipher(message, key)
+
+if __name__ == "__main__":
+	main()
