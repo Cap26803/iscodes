@@ -1,7 +1,7 @@
 from tinyec import registry
 
 
-def ecc_example():
+def ecc():
     curve = registry.get_curve('brainpoolP256r1')
     alice_private_key = 0xA0DC65FFCA799873
     bob_private_key = 0x9C8A3E8D8A1FB663
@@ -12,4 +12,4 @@ def ecc_example():
     assert shared_key_alice == shared_key_bob
     return shared_key_alice
 
-print("ECC Shared Key:", ecc_example())
+print("ECC Shared Key:", ecc())
